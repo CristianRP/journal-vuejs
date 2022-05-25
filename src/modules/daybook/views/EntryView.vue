@@ -21,7 +21,7 @@
   <div class="d-flex flex-column px-3 h-75">
     <textarea placeholder="What happened today?"></textarea>
 
-    <FabButton />
+    <FabButton icon="fa-save"/>
 
     <img
       src="https://elsolnewsmedia.com/wp-content/uploads/2020/10/1601498876_582320_1601498920_noticia_normal.jpg"
