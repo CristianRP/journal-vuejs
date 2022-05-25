@@ -4,7 +4,7 @@
   </div>
   <button class="btn btn-primary">Hola</button>
   <button class="btn btn-secondary">Hola</button>
-  <button class="btn btn-success" @click="goToDaybook">Hola</button>
+  <button class="btn btn-success" @click="goToDaybook">Daybook</button>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     goToDaybook() {
-      this.$router.push({ name: 'daybook' })
+      this.$router.push({ name: 'no-entry' })
     }
    }
 }
