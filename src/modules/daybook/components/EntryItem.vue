@@ -14,8 +14,7 @@
 </template>
 
 <script>
-const months = ['January', 'February', 'March', 'Aphril', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const days   = ['Sunday', 'Monday', 'Thursday', 'Wednesday', 'Thuesday', 'Friday', 'Saturday']
+import getDayMonthYear from '../helpers/getDayMonthYear'
 
 export default {
   props: {
@@ -31,16 +30,16 @@ export default {
         : this.entry.text
     },
     day() {
-      const date = new Date( this.entry.date )
-      return date.getDate()
+      const { day } = getDayMonthYear( this.entry.date )
+      return day
     },
     month() {
-      const date = new Date( this.entry.date )
-      return months[ date.getMonth() ]
+      const { month } = getDayMonthYear( this.entry.date )
+      return month
     },
     yearDay() {
-      const date = new Date( this.entry.date )
-      return `${ date.getFullYear() }, ${ days[ date.getDay() ] }`
+      const { yearDay } = getDayMonthYear( this.entry.date )
+      return yearDay
     }
   }
 }
