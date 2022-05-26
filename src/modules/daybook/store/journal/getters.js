@@ -9,8 +9,11 @@ export const getEntriesByTerm = (state) => ( term = '' ) => {
   return state.entries.filter( entry => entry.text.toLowerCase().includes( term.toLowerCase() ) )
 }
 
-export const getEntryById = (/* state */) => {
-  // return state
+export const getEntryById = ( state ) => ( id = '' ) => {
+  const entry = state.entries.find(entry => entry.id === id)
+  if ( !entry ) return
+
+  return { ...entry } // don't send by ref, bc we should update the store from here (only on mutations)
 }
 
 

@@ -1,9 +1,9 @@
 <template>
   <div class="entry-title d-flex justify-content-between p-2">
     <div>
-      <span class="text-success fs-3 fw-bold">15</span>
-      <span class="mx-1 fs-3">July</span>
-      <span class="mx-2 fs-4 fw-light">2021, Wed</span>
+      <span class="text-success fs-3 fw-bold">{{ day }}</span>
+      <span class="mx-1 fs-3">{{ month }}</span>
+      <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
     </div>
 
     <div>
@@ -19,7 +19,7 @@
   </div>
   <hr>
   <div class="d-flex flex-column px-3 h-75">
-    <textarea placeholder="What happened today?"></textarea>
+    <textarea placeholder="What happened today?" v-model="entry.text"></textarea>
 
     <FabButton icon="fa-save"/>
 
@@ -32,10 +32,61 @@
 
 <script>
 import { defineAsyncComponent } from 'vue';
+import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    id: { type: String, required: true }
+  },
+  data() {
+    return {
+      entry: null
+    }
+  },
   components: {
     FabButton: defineAsyncComponent(() => import('../components/FabButton'))
+  },
+  created() {
+    console.log(this.id);
+    this.loadEntry()
+  },
+  mounted() {
+    console.log(this.id);
+    // this.loadEntry()
+  },
+  computed: {
+    ...mapGetters('journal', ['getEntryById']),
+    shortText() {
+      return ( this.entry.text.length > 130 )
+        ? `${this.entry.text.substring(0, 130)}...`
+        : this.entry.text
+    },
+    day() {
+      const date = new Date( this.entry.date )
+      return date.getDate()
+    },
+    month() {
+      const date = new Date( this.entry.date )
+      return months[ date.getMonth() ]
+    },
+    yearDay() {
+      const date = new Date( this.entry.date )
+      return `${ date.getFullYear() }, ${ days[ date.getDay() ] }`
+    }
+  },
+  methods: {
+    loadEntry() {
+      const entry = this.getEntryById(this.id)
+      if ( !entry ) this.$router.push({ name: 'no-entry' })
+
+      this.entry = entry
+    }
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    id(newValue, _oldValue) {
+      this.loadEntry(newValue)
+    }
   }
 }
 </script>
