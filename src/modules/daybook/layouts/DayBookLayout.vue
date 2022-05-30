@@ -1,7 +1,7 @@
 <template>
   <NavBar />
 
-  <div class="row justify-content-md-center">
+  <div class="row justify-content-md-center" v-if="isLoading">
     <div class="col-3 alert alert-info text-center mt-5" role="alert">
       Please wait...
       <h3 class="mt-2">
@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <div class="d-flex">
+  <div class="d-flex" v-else>
     <div class="col-4">
       <EntryList />
     </div>
@@ -22,7 +22,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 
 export default {
@@ -35,6 +35,9 @@ export default {
   },
   created() {
     this.loadEntries()
+  },
+  computed: {
+    ...mapState('journal', ['isLoading'])
   }
 }
 </script>
