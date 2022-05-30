@@ -1,6 +1,15 @@
 <template>
   <NavBar />
 
+  <div class="row justify-content-md-center">
+    <div class="col-3 alert alert-info text-center mt-5" role="alert">
+      Please wait...
+      <h3 class="mt-2">
+        <i class="fa fa-spin fa-sync"></i>
+      </h3>
+    </div>
+  </div>
+
   <div class="d-flex">
     <div class="col-4">
       <EntryList />
