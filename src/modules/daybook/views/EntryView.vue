@@ -23,7 +23,9 @@
     <div class="d-flex flex-column px-3 h-75">
       <textarea placeholder="What happened today?" v-model="entry.text"></textarea>
 
-      <FabButton icon="fa-save"/>
+      <FabButton
+        icon="fa-save"
+        @on:click="saveEntry" />
 
       <img
         src="https://elsolnewsmedia.com/wp-content/uploads/2020/10/1601498876_582320_1601498920_noticia_normal.jpg"
@@ -35,7 +37,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue';
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import getDayMonthYear from '../helpers/getDayMonthYear'
 
@@ -85,7 +87,15 @@ export default {
       if ( !entry ) return this.$router.push({ name: 'no-entry' })
 
       this.entry = entry
-    }
+    },
+
+    async saveEntry() {
+      console.log('saving entry');
+      console.log(this.entry);
+      this.updateEntry(this.entry)
+    },
+
+    ...mapActions('journal', ['updateEntry'])
   },
   watch: {
     // eslint-disable-next-line no-unused-vars
