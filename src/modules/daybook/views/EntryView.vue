@@ -39,8 +39,9 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent } from 'vue'
 import { mapGetters, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 
 import getDayMonthYear from '../helpers/getDayMonthYear'
 
@@ -101,6 +102,13 @@ export default {
     },
 
     async saveEntry() {
+
+      new Swal({
+        title: 'Please wait',
+        allowOutsideClick: false
+      })
+      Swal.showLoading()
+
       if (this.entry.id) {
         await this.updateEntry(this.entry)
       } else {
@@ -108,12 +116,33 @@ export default {
 
         this.$router.push({ name: 'entry', params: { id } })
       }
+
+      Swal.fire('Saved', 'Entry saved properly', 'success')
     },
 
     async onDeleteEntry() {
-      await this.deleteEntry( this.entry.id )
 
-      this.$router.push({ name: 'no-entry' })
+      const { isConfirmed } = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'This will erase the entry permanently',
+        showDenyButton: true,
+        confirmButtonText: 'Yes, delete',
+        denyButtonText: 'Cancel'
+      })
+
+      if (isConfirmed) {
+        new Swal({
+          title: 'Please wait',
+          allowOutsideClick: false
+        })
+        Swal.showLoading()
+
+        await this.deleteEntry( this.entry.id )
+
+        this.$router.push({ name: 'no-entry' })
+
+        Swal.fire('Deleted', '', 'success')
+      }
     },
 
     ...mapActions('journal', ['updateEntry', 'createEntry', 'deleteEntry'])
