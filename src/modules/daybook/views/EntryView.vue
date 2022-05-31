@@ -8,6 +8,11 @@
       </div>
 
       <div>
+
+        <input
+          type="file"
+          @change="onSelectedImage">
+
         <button
           v-if="entry.id"
           @click="onDeleteEntry"
@@ -30,8 +35,14 @@
         icon="fa-save"
         @on:click="saveEntry" />
 
-      <img
+      <!-- <img
         src="https://elsolnewsmedia.com/wp-content/uploads/2020/10/1601498876_582320_1601498920_noticia_normal.jpg"
+        alt="entry-picture"
+        class="img-thumbnail"> -->
+
+      <img
+        v-if="localImage"
+        :src="localImage"
         alt="entry-picture"
         class="img-thumbnail">
     </div>
@@ -51,7 +62,9 @@ export default {
   },
   data() {
     return {
-      entry: null
+      entry: null,
+      localImage: null,
+      file: null
     }
   },
   components: {
@@ -143,6 +156,26 @@ export default {
 
         Swal.fire('Deleted', '', 'success')
       }
+    },
+
+    onSelectedImage( event ) {
+      const file = event.target.files[0]
+
+      if ( !file ) {
+        this.localImage = null
+        this.file = null
+        return
+      }
+
+      this.file = file
+
+      const fr = new FileReader()
+      fr.onload = () => this.localImage = fr.result
+      fr.readAsDataURL( file )
+    },
+
+    onSelectImage() {
+      
     },
 
     ...mapActions('journal', ['updateEntry', 'createEntry', 'deleteEntry'])
