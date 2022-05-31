@@ -11,6 +11,9 @@
 
         <input
           type="file"
+          ref="imageSelector"
+          v-show="false"
+          accept="image/png, image/jpeg"
           @change="onSelectedImage">
 
         <button
@@ -20,7 +23,7 @@
           Delete
           <i class="fa fa-trash-alt"></i>
         </button>
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" @click="onSelectImage">
           Upload Photo
           <i class="fa fa-upload"></i>
         </button>
@@ -175,7 +178,7 @@ export default {
     },
 
     onSelectImage() {
-      
+      this.$refs.imageSelector.click()
     },
 
     ...mapActions('journal', ['updateEntry', 'createEntry', 'deleteEntry'])
