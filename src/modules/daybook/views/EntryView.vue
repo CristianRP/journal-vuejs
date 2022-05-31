@@ -101,12 +101,13 @@ export default {
       if (this.entry.id) {
         await this.updateEntry(this.entry)
       } else {
-        // create a new entry
-        console.log('post new entry');
+        const id = await this.createEntry(this.entry)
+
+        this.$router.push({ name: 'entry', params: { id } })
       }
     },
 
-    ...mapActions('journal', ['updateEntry'])
+    ...mapActions('journal', ['updateEntry', 'createEntry'])
   },
   watch: {
     // eslint-disable-next-line no-unused-vars

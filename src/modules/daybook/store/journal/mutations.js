@@ -13,7 +13,8 @@ export const updateEntry = ( state, entry ) => { // updated entry
   // state.entries = ...entries
 }
 
-export const addEntry = ( /* state */ ) => {
-
+export const addEntry = ( state, entry ) => {
+  // state.entries.unshift(entry)
+  state.entries = [ entry, ...state.entries ]
 }
 
