@@ -38,10 +38,11 @@
         icon="fa-save"
         @on:click="saveEntry" />
 
-      <!-- <img
-        src="https://elsolnewsmedia.com/wp-content/uploads/2020/10/1601498876_582320_1601498920_noticia_normal.jpg"
+      <img
+        v-if="entry.picture && !localImage"
+        :src="entry.picture"
         alt="entry-picture"
-        class="img-thumbnail"> -->
+        class="img-thumbnail">
 
       <img
         v-if="localImage"
@@ -58,6 +59,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Swal from 'sweetalert2'
 
 import getDayMonthYear from '../helpers/getDayMonthYear'
+import uploadImage from '../helpers/uploadImage'
 
 export default {
   props: {
@@ -125,6 +127,10 @@ export default {
       })
       Swal.showLoading()
 
+      const picture = await uploadImage( this.file )
+
+      this.entry.picture = picture
+
       if (this.entry.id) {
         await this.updateEntry(this.entry)
       } else {
@@ -133,6 +139,8 @@ export default {
         this.$router.push({ name: 'entry', params: { id } })
       }
 
+      this.file = null
+      this.localImage = null
       Swal.fire('Saved', 'Entry saved properly', 'success')
     },
 

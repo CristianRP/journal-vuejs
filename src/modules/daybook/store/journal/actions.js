@@ -25,8 +25,8 @@ export const loadEntries = async({ commit }) => {
 export const updateEntry = async({ commit }, entry) => { // entry should be a param
 
   // exctract only what we need // -id
-  const { date, text } = entry
-  const dataToSave = { date, text}
+  const { date, text, picture } = entry
+  const dataToSave = { date, text, picture}
 
   // await journalApi.put (path, .json, dataToSave)
   await journalApi.put(`/entries/${entry.id}.json`, dataToSave)
@@ -36,8 +36,8 @@ export const updateEntry = async({ commit }, entry) => { // entry should be a pa
 }
 
 export const createEntry = async({ commit }, entry) => {
-  const { date, text } = entry
-  const dataToSave = { date, text }
+  const { date, text, picture } = entry
+  const dataToSave = { date, text, picture }
 
   const { data } = await journalApi.post(`/entries.json`, dataToSave)
 
