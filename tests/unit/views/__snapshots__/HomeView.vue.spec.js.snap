@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests on HomeView component should match with the snapshot 1`] = `
+<div class="home"><img alt="Vue logo" src=""></div>
+<button class="btn btn-success">Daybook</button>
+<button class="btn btn-primary">Hola</button>
+<button class="btn btn-secondary">Hola</button>
+`;
