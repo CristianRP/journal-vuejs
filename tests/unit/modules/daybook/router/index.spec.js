@@ -20,7 +20,12 @@ describe("Tests on router module from Dayboo", () => {
       ],
     })
 
-    expect( (await daybookRouter.children[0].component()).default.name ).toBe('NoEntrySelected')
-    expect( (await daybookRouter.children[1].component()).default.name ).toBe('EntryView')
+    const promiseRoutes = []
+    daybookRouter.children.forEach( child => promiseRoutes.push( child.component() ) )
+
+    const routes = (await Promise.all( promiseRoutes )).map( r => r.default.name )
+
+    expect( routes ).toContain('EntryView')
+    expect( routes ).toContain('NoEntrySelected')
   })
 })
