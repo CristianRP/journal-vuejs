@@ -1,7 +1,7 @@
 import daybookRouter from "@/modules/daybook/router";
 
 describe("Tests on router module from Dayboo", () => {
-  test("should has a valid config", () => {
+  test("should has a valid config", async() => {
     expect(daybookRouter).toMatchObject({
       name: "daybook",
       component: expect.any( Function ),
@@ -18,6 +18,9 @@ describe("Tests on router module from Dayboo", () => {
           props: expect.any( Function )
         },
       ],
-    });
-  });
-});
+    })
+
+    expect( (await daybookRouter.children[0].component()).default.name ).toBe('NoEntrySelected')
+    expect( (await daybookRouter.children[1].component()).default.name ).toBe('EntryView')
+  })
+})
