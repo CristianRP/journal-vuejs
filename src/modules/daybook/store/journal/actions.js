@@ -30,9 +30,10 @@ export const updateEntry = async({ commit }, entry) => { // entry should be a pa
 
   // await journalApi.put (path, .json, dataToSave)
   await journalApi.put(`/entries/${entry.id}.json`, dataToSave)
+  dataToSave.id = entry.id
 
   // Commit a mutation
-  commit('updateEntry', entry)
+  commit('updateEntry', { ...dataToSave } )
 }
 
 export const createEntry = async({ commit }, entry) => {

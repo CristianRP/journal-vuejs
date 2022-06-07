@@ -96,4 +96,36 @@ describe('Vuex - test on Journal Module', () => {
     expect( store.getters['journal/getEntryById']('-N3PLntxWSjEgGDGZepB') ).toEqual(entry1)
   })
 
+  // Actions
+  test('actions: loadEntries', async() => {
+    const store = createVuexStore({ isLoading: true, entries: []})
+
+    await store.dispatch('journal/loadEntries')
+
+    expect( store.state.journal.entries.length ).toBe(5)
+  })
+
+  test('actions: loadEntries', async() => {
+    const store = createVuexStore( journalState )
+
+    const updatedEntry = {
+      "id": "-N3PLntxWSjEgGDGZepB",
+      "date": 1654004594018,
+      "text": "Hello From Tests\n'Labore dolor laborum aliqua est excepteur labore Lorem. Laborum sint elit sit culpa labore. Eiusmod id et amet elit exercitation. Eu amet deserunt commodo voluptate et. Consequat cupidatat aliqua id eu tempor mollit laborum sunt cupidatat ipsum Lorem. Reprehenderit labore do amet proident adipisicing nisi exercitation. Consectetur do magna nulla ut eiusmod do nulla veniam officia laborum et cillum tempor.',",
+      "test": true,
+      "picture": "test"
+    }
+
+    await store.dispatch('journal/updateEntry', updatedEntry)
+
+    expect( store.state.journal.entries.length ).toBe(2)
+    expect(
+      store.state.journal.entries.find( e => e.id === updatedEntry.id )
+    ).toEqual( {
+      "id": "-N3PLntxWSjEgGDGZepB",
+      "date": 1654004594018,
+      "text": "Hello From Tests\n'Labore dolor laborum aliqua est excepteur labore Lorem. Laborum sint elit sit culpa labore. Eiusmod id et amet elit exercitation. Eu amet deserunt commodo voluptate et. Consequat cupidatat aliqua id eu tempor mollit laborum sunt cupidatat ipsum Lorem. Reprehenderit labore do amet proident adipisicing nisi exercitation. Consectetur do magna nulla ut eiusmod do nulla veniam officia laborum et cillum tempor.',",
+      "picture": "test"
+    })
+  })
 })
