@@ -77,11 +77,9 @@ export default {
     FabButton: defineAsyncComponent(() => import('../components/FabButton'))
   },
   created() {
-    console.log(this.id);
     this.loadEntry()
   },
   mounted() {
-    console.log(this.id);
     // this.loadEntry()
   },
   computed: {
@@ -122,7 +120,7 @@ export default {
 
     async saveEntry() {
 
-      new Swal({
+      Swal.fire({
         title: 'Please wait',
         allowOutsideClick: false
       })
@@ -156,7 +154,7 @@ export default {
       })
 
       if (isConfirmed) {
-        new Swal({
+        Swal.fire({
           title: 'Please wait',
           allowOutsideClick: false
         })
