@@ -3,39 +3,61 @@ import { createStore } from 'vuex'
 
 import EntryList from '@/modules/daybook/components/EntryList'
 
+import journal from '@/modules/daybook/store/journal'
 import { getEntriesByTerm } from '@/modules/daybook/store/journal/getters'
 import { journalState } from '../../../mock-data/test-journal-state'
 
+const createVuexStore = ( initialStore ) => createStore({
+  modules: {
+    journal: {
+      ...journal,
+      state: { ...initialStore }
+    }
+  }
+})
+
 describe('Tests on EntryList', () => {
 
-  const journalMockModule = {
-    namespaced: true,
-    getters: {
-      // getEntriesByTerm: jest.fn()
-      getEntriesByTerm
-    },
-    state: () => ({
-      isLoading: false,
-      entries: journalState.entries
-    })
+  let wrapper
+
+  const store = createVuexStore( journalState )
+  const mockRouter = {
+    push: jest.fn()
   }
 
-  const store = createStore({
-    modules: {
-      journal: { ...journalMockModule }
-    }
-  })
+  beforeEach(() => {
+    jest.clearAllMocks()
 
-  const wrapper = shallowMount( EntryList, {
-    global: {
-      mocks: {
-        // $router:
-      },
-      plugins: [ store ]
-    }
+    wrapper = shallowMount( EntryList, {
+      global: {
+        mocks: {
+          $router: mockRouter
+        },
+        plugins: [ store ]
+      }
+    })
   })
 
   test('should call getEntriesByTerm and show 2 entries', () => {
-    console.log(wrapper.html());
+    expect( wrapper.findAll('entry-item-stub').length ).toBe(2)
+    expect( wrapper.html() ).toMatchSnapshot()
+  })
+
+  test('should call getEntriesByTerm and filter entries', async() => {
+    const input = wrapper.find('input')
+    await input.setValue('Test')
+
+    expect( wrapper.findAll('entry-item-stub').length ).toBe(1)
+  })
+
+  test('new button should redirect to /new', () => {
+    wrapper.find('button').trigger('click')
+
+    expect( mockRouter.push ).toHaveBeenCalledWith({
+      name: 'entry',
+      params: {
+        id: 'new'
+      }
+    })
   })
 })
