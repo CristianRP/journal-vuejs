@@ -3,17 +3,14 @@
 
 		<div class="container-login100" style="background-image: url('./assets/bg-01.jpg');">
 			<div class="wrap-login100 p-t-30 p-b-50">
-				<LoginView />
+				<router-view />
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import LoginView from '../views/LoginView.vue';
-
 export default {
-    components: { LoginView }
 }
 </script>
 
