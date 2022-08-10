@@ -142,4 +142,54 @@ describe('Vuex: tests on auth-module', () => {
     expect( typeof idToken).toBe( 'string' )
     expect( typeof refreshToken).toBe( 'string' )
   })
+
+  test('Actions: checkAuthentication - positive', async() => {
+    const store = createVuexStore({
+      status: 'not-authenticated',
+      user: null,
+      idToken: null,
+      refreshToken: null
+    })
+
+    // SignIn
+    await store.dispatch('auth/signInUser', { email: 'patito@test.com', password: '123123' })
+    const { idToken } = store.state.auth
+    store.commit('auth/logout')
+
+    localStorage.setItem('idToken', idToken)
+
+    const checkResponse = await store.dispatch('auth/checkAuthentication')
+
+
+    const { status, user, idToken:token, refreshToken } = store.state.auth
+
+    expect( checkResponse ).toEqual({ ok: true })
+
+    expect(status).toBe('authenticated')
+    expect(user).toMatchObject( { name: 'PatitoT', email: 'patito@test.com' } )
+    expect( typeof idToken).toBe( 'string' )
+  })
+
+  test('Actions: checkAuthentication - negative', async() => {
+
+    const store = createVuexStore({
+      status: 'authenticating',
+      user: null,
+      idToken: null,
+      refreshToken: null
+    })
+
+    localStorage.removeItem('idToken')
+    const checkResponse = await store.dispatch('auth/checkAuthentication')
+
+    expect( checkResponse ).toEqual({ ok: false, message: 'Not token'})
+    expect( store.state.auth.user ).toBeFalsy()
+    expect( store.state.auth.idToken ).toBeFalsy()
+    expect( store.state.auth.status ).toBe('not-authenticated')
+
+    localStorage.setItem('idToken', 'ABC-123')
+    const checkResponse1 = await store.dispatch('auth/checkAuthentication')
+    expect( checkResponse1 ).toEqual({ ok: false, message: 'INVALID_ID_TOKEN' })
+    expect( store.state.auth.status ).toBe('not-authenticated')
+  })
 })
